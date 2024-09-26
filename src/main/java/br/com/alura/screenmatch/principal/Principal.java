@@ -118,7 +118,7 @@ public class Principal {
             Serie serie = serieBusca.get();
             List<Episodio> topEpisodios = repository.topEpisodiosPorSerie(serie);
             topEpisodios.forEach(e ->
-                    System.out.printf("Série: %s Temporada %s - Episodio %s - %s - Nota %s \n",
+                    System.out.printf("Série: %s Temporada %s - Episódio %s - %s - Nota %s \n",
                             e.getSerie().getTitulo(), e.getTemporada(),
                             e.getNumeroEpisodio(), e.getTitulo(), e.getAvaliacao()));
         }
