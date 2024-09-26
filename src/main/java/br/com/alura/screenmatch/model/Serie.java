@@ -36,8 +36,13 @@ public class Serie {
 
     private String sinopse;
 
-    @Transient
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "serie", cascade = CascadeType.ALL)
     private List<Episodio> episodios = new ArrayList<>();
+
+    public void setEpisodios(List<Episodio> episodios){
+        episodios.forEach(e -> e.setSerie(this));
+        this.episodios = episodios;
+    }
 
     public Serie(DadosSerie dadosSerie){
         this.titulo = dadosSerie.titulo();
