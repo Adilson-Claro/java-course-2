@@ -39,7 +39,9 @@ public class Principal {
             var menu = """
                     1 - Buscar séries
                     2 - Buscar episódios
-                    3 - Listar series buscadas
+                    3 - Listar séries buscadas
+                    4 - Buscar série por titulo
+                    5 - Buscar séries por ator
                     
                     0 - Sair                                 
                     """;
@@ -58,12 +60,41 @@ public class Principal {
                 case 3:
                     listarSeriesBuscadas();
                     break;
+                case 4:
+                    buscarSeriePorTitulo();
+                    break;
+                case 5:
+                    buscarSeriePorAtor();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida");
             }
+        }
+    }
+
+    private void buscarSeriePorAtor() {
+        System.out.println("Qual nome do ator: ");
+        var nomeAtor = sc.nextLine();
+        System.out.println("Avaliações a partir de qual valor: ");
+        var avaliacao = sc.nextDouble();
+        List<Serie> seriesEncontradas = repository.findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(nomeAtor, avaliacao);
+        System.out.println("Séries em que " + nomeAtor + " Trabalhou");
+
+        seriesEncontradas.forEach(s -> System.out.println(s.getTitulo() + " avaliação" + s.getAvaliacao()));
+    }
+
+    private void buscarSeriePorTitulo() {
+        System.out.println("Escolha uma série pelo nome: ");
+        var nomeSerie = sc.nextLine();
+        Optional<Serie> serieBuscada = repository.findByTituloContainingIgnoreCase(nomeSerie);
+
+        if (serieBuscada.isPresent()){
+            System.out.println("Dados da série: " + serieBuscada.get() );
+        }else {
+            System.out.println("Série não encontrada");
         }
     }
 
@@ -88,7 +119,7 @@ public class Principal {
 
     private void buscarEpisodioPorSerie() {
         listarSeriesBuscadas();
-        System.out.println("Escolha uma serie pelo nome: ");
+        System.out.println("Escolha uma série pelo nome: ");
         var nomeSerie = sc.nextLine();
 
         Optional<Serie> serie = series.stream()
@@ -115,7 +146,7 @@ public class Principal {
             serieEncontrada.setEpisodios(episodios);
             repository.save(serieEncontrada);
         } else {
-            System.out.println("Serie não encontrada");
+            System.out.println("Série não encontrada");
         }
     }
     @Transactional
